@@ -215,7 +215,7 @@ In `merc.h`, removing `MSDOS` and unguarding `unix` gives me this in the main co
 #define NULL_FILE       "/dev/null"     // To reserve one stream
 ```
 
-There is a lot of code that was in the `unix` path that is actually now a part of the Win32 API and/or platform, but this isn't one of them. I'm puttig a TODO here to make sure I touch on this when I port to MSVC:
+There is a lot of code that was in the `unix` path that is actually now a part of the Win32 API and/or platform, but this isn't one of them. I'm putting a TODO here to make sure I touch on this when I port to MSVC:
 
 ```c
 // TODO: Research how to reserve a stream in MSVC without /dev/null.
@@ -259,7 +259,7 @@ Now that we are using the old `unix` path as the default, One True Path(tm), the
 
 > So it's not a MUD; it's a SUD. _(har har)_
 
-But all of our target platforms can run in server mode, and will run soon-to-be misnamed `game_loop_unix()`. The solution is to simply rename it to `game_loop()` everywhere it appears.
+But all of our target platforms can run in server mode, and will run the soon-to-be misnamed `game_loop_unix()`. The solution is to simply rename it to `game_loop()` everywhere it appears.
 
 ### A Couple Random Things...
 
@@ -374,7 +374,7 @@ And with that, the vast majority of errors are gone.
 
 This one I probably did, myself, while refactoring `#include`s:
 
-```c
+```
 In file included from interp.h:32,
                  from act_comm.c:29:
 merc.h:504:5: error: unknown type name ‘time_t’
@@ -392,7 +392,7 @@ Adding this to `merc.h` fixes it:
 
 The next two errors reveal that we have some of the old, non-`stdbool.h` macros hanging around:
 
-```c
+```
 act_comm.c: In function ‘do_delete’:
 act_comm.c:57:42: error: ‘FALSE’ undeclared (first use in this function)
    57 |             ch->pcdata->confirm_delete = FALSE;
@@ -442,7 +442,7 @@ And I add this to `save.c`:
 
 Everything seems fine on the Cygwin side. But after compiling under GCC on Ubuntu, I have this warning, from `load_char_obj()` in `save.c`:
 
-```c
+```
 save.c:643:9: warning: ignoring return value of ‘system’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
   643 |         system(buf);
       |         ^~~~~~~~~~~
