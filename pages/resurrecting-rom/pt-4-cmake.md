@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  "Resurrecting ROM Pt. 4 - Cross-Platform Compilation With CMake"
-date:   2023-05-10 20:00:00 -0500
+date:   2023-05-11 20:00:00 -0500
 categories: mud C CMake
 ---
 
