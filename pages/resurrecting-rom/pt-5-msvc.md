@@ -9,9 +9,9 @@ categories: mud C CMake MSVC
 
 This post picks up where [Part 4](pt-4-cmake) left off. [Here is the code](https://github.com/bfelger/rom/tree/f03fa77b6e4779dc2e03b0b88c93bbe7d2cc0c3b) that resulted from the work.
 
-Previously, I made very attempt to squash all warnings errors on each platform in one go. To do that on Windows would balloon this post, and create so many deltas in the git check-in that it would be utterly unintelligible. 
+Previously, I made every attempt to squash all errors (and warnings) on each platform in one go. To do that on Windows would balloon this post, and create so many deltas in the git check-in that it would be utterly unintelligible. 
 
-Therefore, I will keep my goal for this "Part 1" squarely on getting ROM to _run_ under MSVC for Windows. I will handle clearing up all the errors for "Part 2" (because the stakes will be lower).
+Therefore, I will keep my goal for this "Part 1" squarely on getting ROM to _run_ under MSVC for Windows. I will fixing only errors, and leave all the warnings and other compiler messages for "Part 2" (because the stakes will be lower).
 
 ## Opening the Folder with Visual Studio
 
@@ -135,7 +135,7 @@ Windows does not have `crypt()`. It _does_ have a Crypto API, but it's a "real" 
 So, for now, I will `CMakeLists.txt` to add `-D NOCRYPT` to it's definitions:
 
 ```cmake
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS -D NOCRYPT)
+    add_definitions(-D NOCRYPT)
 ```
 
 And then I add a guard around the library link:
@@ -250,7 +250,7 @@ The right way to fix this is to bring the disparate platforms into harmony with 
 #endif
 ```
 
-### Interlude &mdash; Temporarily Disable Deprecation Warnings
+### Interlude &mdash; Disable Spurious Deprecation Warnings
 
 Right now, I have a flood of these:
 
@@ -258,15 +258,19 @@ Right now, I have a flood of these:
 Warning	C4996 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 ```
 
-Given how easy ROM was to hack with string-buffer exploits, I think these warnings are worth paying attention to. But first I want to take care of the errors. I will (_very temporarily_) disable them in `CMakeLists.txt`:
+Microsoft deviates frequently from POSIX, and often in the name of security. In this case, however, they want me to use a functions like `sprintf_s()` instead of `sprintf()`, or `fopen_s()` instead of `fopen()`.
+
+These are "secure" alternatives, and have been made a part of the C Standard (since C11) as an optional extension. However, Microsoft's own implementation is at odds with the Standard, itself, and to dubious benefit. Therefore, other compilers have refused to implement these functions, and there is little point in trying to support two ways of doing _every_ POSIX function.
+
+> Also, the POSIX functions aren't "deprecated"; the "secure" variants are merely an alternative (albeit only supported on one platform).
+
+Therefore, I turn off the warning, and go about my day:
 
 ```cmake
 if (MSVC)
     add_compile_options(/W3 /std:c17 )
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS -D NOCRYPT)
 ```
-
-I will remove that definition later and deal with those unsafe functions. For now, I move on.
 
 ### Win32 Programming Administrivia
 
