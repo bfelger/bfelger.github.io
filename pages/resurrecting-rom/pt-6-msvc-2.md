@@ -290,7 +290,7 @@ I'm sure the C Standard has an answer, but I would much prefer to explicitly cas
 mob->max_hit = (int16_t)((double)mob->max_hit * 0.9);
 ```
 
-Here, I chose to delay rounding until the very last assignment so as to compound loss of precision.
+Here, I chose to delay rounding until the very last assignment so as to not compound the loss of precision.
 
 ### Short Flags
 
