@@ -105,8 +105,6 @@ The compiler will concatenate these string literals at compile time.
 
 Many years ago, `int` was the universal assumed data type for memory sizes and string length. Today, however, that role belongs to `size_t`. POSIX functions like `strlen()` return it. GCC and Clang didn't so much mind ROM using `int`, but MSVC very much does.
 
-> There's always the possibility that GCC/Clang _would_ under `-pedantic -Wetra`. But if I achieve my goal here, _I will never know._
-
 So I have lot of warnings like this, from `do_description()` in `act_info.c`:
 
 ```
