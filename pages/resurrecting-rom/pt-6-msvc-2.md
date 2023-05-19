@@ -156,7 +156,7 @@ Now, in some areas I can avoid the cast and responsibly use `ptrdiff_t` the way 
     ptrdiff_t outtop;
 ```
 
-To make this work in GCC/Clang, however, you also have to add this to the top of the header:
+To make this work in GCC/Clang, however, I also have to add this to the top of the header:
 
 ```c
 #ifndef _MSC_VER
