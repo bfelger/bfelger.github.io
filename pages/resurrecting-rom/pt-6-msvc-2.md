@@ -345,7 +345,7 @@ Here is `ban_last`'s definition (after consolidating declaration and initializat
 BAN_DATA* ban_last = NULL;
 ```
 
-Take a look at that first chunk; the problem chunk. Do you see what it's doing? It's building a linked list. But's the compiler is confused because it doesn't realize that if ban_list is _not_ NULL, then it's later iteration where `ban_last` was set. I another NOOP conditional to make things clear to the compiler:
+Take a look at that first chunk; the problem chunk. Do you see what it's doing? It's building a linked list. But the compiler is confused because it doesn't realize that if ban_list is _not_ NULL, then it's a later iteration where `ban_last` was set. I add another NOOP conditional to make things clear to the compiler:
 
 ```c
     if (ban_list == NULL)
@@ -355,9 +355,9 @@ Take a look at that first chunk; the problem chunk. Do you see what it's doing? 
     ban_last = pban;
 ```
 
-I also fix similar (almost identical, in fact) issues with `load_helps()` and `load_resets()` and `db.c`.
+I also fix similar issues with `load_helps()` and `load_resets()` in `db.c`.
 
-There's also a NULL _spurious_ dereference in `load_shops()`  at the `alloc_perm()` call that I fix like so:
+There's also a spurious NULL dereference warning in `load_shops()`  at the `alloc_perm()` call that I fix like so:
 
 ```c
     if ((pShop = (SHOP_DATA*)alloc_perm(sizeof(*pShop))) == NULL) {
@@ -369,10 +369,6 @@ There's also a NULL _spurious_ dereference in `load_shops()`  at the `alloc_perm
 The test for NULL and subsequent warning are actually a NOOP; `alloc_perm()` tests for NULL in itself, and kills the program. This is just to mollify the compiler in an code-consistent way.
 
 `pReset` in `load_resets()` needs similar treatment.
-
-```c
-    pShop->keeper = (int16_t)fread_number(fp);
-```
 
 ### Warnings in PCG
 
