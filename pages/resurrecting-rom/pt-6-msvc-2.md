@@ -596,6 +596,25 @@ Note that there is no need for the label if there is no early exit from the func
 
 > Oh, and I totally changed the buffer names in my actual code to `temp1`-`3`, because `buf`, `buf2`, and `buffer`? Terrible. I'll go back later and replace `temp` with what the buffer is actually used for.
 
+Now, there is a problem with the way I'm using `BUFFER`: grabbing `MAX_STRING_LENGTH*4` will crash the app. Here's why (in `recycle.c`):
+
+```c
+/* buffer sizes */
+const int buf_size[MAX_BUF_LIST]
+    = {16, 32, 64, 128, 256, 1024, 2048, 4096, 8192, 16384};
+```
+
+At is turns out, `MAX_STRING_LENGTH*4` is larger than the largest allowed buffer. To fix this, I am expanding `buf_size` (and therefore also the value of `MAX_BUF_LIST` in `merc.h`) by 3:
+
+```c
+/* buffer sizes */
+const int buf_size[MAX_BUF_LIST]
+    = {16, 32, 64, 128, 256, 1024, 2048, 4096, MAX_STRING_LENGTH, 8192, 
+        MAX_STRING_LENGTH*2, 16384, MAX_STRING_LENGTH*4};
+```
+
+The smaller two new values fit in the larger buckets, but I don't _want_ them too. That is too much wasted space for my liking.
+
 ### Zero-Termination
 
 Here's the last warning, `write_to_buffer()` in `comm.c`:
@@ -691,6 +710,6 @@ And with that, ROM now builds, error _and_ warning-free, on all four of my targe
 
 Future noodlings in this code base will be built on the work I did here.
 
-([Here is the code](https://github.com/bfelger/rom/tree/237cdcfaec6062ddb6f8ea479dfc7ae309f7222a) with updates from this post.)
+([Here is the code](https://github.com/bfelger/rom/tree/ac968f668dd3f5c96eee55d6e855641d6a8ba496) with updates from this post.)
 
 Copyright 2023, Brandon Felger
