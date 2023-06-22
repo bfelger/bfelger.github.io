@@ -42,7 +42,7 @@ Because Ninja is MSVC's prefer CMake generation tool, it should look familiar. O
 Right now, we only have one configuration: Debug. Another thing I notice is that the compiler flags I set in `CMakeLists.txt` were not honored:
 
 ```cmake
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     add_compile_options(/W4 /WX /std:c17)
 ```
 
@@ -592,7 +592,7 @@ void* alloc_mem(int sMem)
 }
 ```
 
-Memory in ROM is handled by recycle pools, each one being a linked list of freely available memory. Each pool, or "bucket", has a size. Each element in the bucket is the same size.
+Memory in ROM is handled by recycle pools, each one being a linked list of freely available memory. Each pool, or "bucket", has an assigned size. Each element in the bucket is the same size.
 
 This function works like so:
 1. `sMem` (the desired size of allocated memory) is increased by the size of a pointer. That's a "tax" on each allocated object, as the memory manager uses the first few bytes to store a pointer.
@@ -1152,6 +1152,8 @@ There are no errors, and no warnings.
 Now I have ROM building (and running!) under MSVC on Windows. However, there are still hundreds of warning to take care of whe compiling under MSVC. That will be the next part of this series. Once all four platforms (GCC/Linux, Clang/Linux, Cygwin, and MSVC) are building without errors or warnings, it will be time to set up ROM for profiling, and then start hacking.
 
 ([Here is the code](https://github.com/bfelger/rom/tree/70717079d2b4bb3a1e3ab1fd692e165ee8cf6e07) with updates from this post.)
+
+Next: [Part 6](pt-6-msvc-2)
 
 Copyright 2023, Brandon Felger
 

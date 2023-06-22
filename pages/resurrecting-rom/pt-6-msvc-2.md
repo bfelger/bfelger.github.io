@@ -706,7 +706,7 @@ Is says the problem is the first line; but it's actually the _last_.
 
 ## Coda
 
-And with that, ROM now builds, error _and_ warning-free, on all four of my targeted platforms. And, with that, I have my "baseline": ROM Resurrected.
+And with that, ROM now builds, error _and_ warning-free, on all four of my targeted platforms. I now have my "baseline": ROM Resurrected.
 
 Future noodlings in this code base will be built on the work I did here.
 

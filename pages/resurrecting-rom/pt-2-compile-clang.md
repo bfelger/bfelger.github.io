@@ -433,4 +433,6 @@ Awesome. We now have ROM running, warning-free, on three compilers on two differ
 
 ([Here is the code](https://github.com/bfelger/rom/tree/050e23e08a81f86ec8f7352b6f18c8ba55eb8fdb) with updates from this post.)
 
+Next: [Part 3](pt-3-dusting-off-cobwebs)
+
 Copyright 2023, Brandon Felger

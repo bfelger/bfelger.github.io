@@ -25,7 +25,7 @@ make
 ```
 Yikes! That's a lot of errors. I have to take it one file at a time, and one error at a time.
 
-I'll start with the first file listed in order of compilation, `act_info.c`:
+I'll start with the first file listed in order of compilation, `act_comm.c`:
 
 ```
 gcc -c -Wall -O -g  act_comm.c
@@ -75,7 +75,7 @@ Because ROM's predecessor, Merc, was being compiled on dozens of archaic systems
 
 Now, I don't have `TRADITIONAL` defined (because it's not 1985 anymore), so `args(list)` becomes just `list`. The very first standard of C ("ANSI" C) requires full function signatures in prototypes, however; hence this preproc macro. So I _should_ be good, right?
 
-I notice that `interp.h` doesn't include `merc.h`, which means that `act_info.c` is including both, here:
+I notice that `interp.h` doesn't include `merc.h`, which means that `act_comm.c` is including both, here:
 
 ```c
 #include "interp.h"
@@ -105,7 +105,7 @@ Now, to avoid any issues, I add this to `merc.h`:
 #define ROM__MERC_H
 ```
 
-Hey now, why are there two include guards? Both should be recognizeable; the traditional, portable `#define` and Microsoft's propriatary, non-portable `#pragma once`.
+Hey now, why are there two include guards? Both should be recognizable; the traditional, portable `#define` and Microsoft's proprietary, non-portable `#pragma once`.
 
 This is called a "double guard", and there is a very good reason for doing it this way. `#pragma once` is now implemented in most big-name C compilers, and for those that do _not_ implement it, it's a NOOP. This pragma makes it so that the compiler remembers opening _this exact file_, and never opens it again. Problem: the compiler can still include the file _if_ it comes from a different path.
 
@@ -143,7 +143,7 @@ merc.h:1939:8: error: unknown type name ‘FILE’
       |        ^~~~
 ```
 
-`merc.h` has no reference to `stdio.h`, so it has no idea what `FILE` is. Presumedly, the code files that actually _call_ these functions will include `stdio.h`, and perhaps in the days of yore, the code files that _didn't_ would elide over these incomplete definitions. That is definitely not the case, today.
+`merc.h` has no reference to `stdio.h`, so it has no idea what `FILE` is. Presumably, the code files that actually _call_ these functions will include `stdio.h`, and perhaps in the days of yore, the code files that _didn't_ would elide over these incomplete definitions. That is definitely not the case, today.
 
 Note that this is not the only place in `merc.h` that references `FILE`:
 
@@ -202,7 +202,7 @@ But this is poor organization, and it needs to be fixed. The solution, therefore
 └───────────────────────┘
 ```
 
-In `tables.h`, this is trival work; just move the `extern`s to the bottom. Most of the other headers, however, have all these elements in backwards order, and thus are more work.
+In `tables.h`, this is trivial work; just move the `extern`s to the bottom. Most of the other headers, however, have all these elements in backwards order, and thus are more work.
 
 I'm not touching `merc.h`, however; that header (in my opinion) shouldn't even exist.  I will change it enough to get the code built, and refactor later. In addition to `tables.h`, I also reorder the contents of `db.h`, `interp.h`, and `music.h`.
 
@@ -380,7 +380,7 @@ db.c:2556:40: warning: format ‘%d’ expects argument of type ‘int’, but a
       |                           long unsigned int
 ```
 
-This being legacy C, there is an assumption that all sizes fit in an `int`, so that is what `sizeof()` returned. With the introduction of 64-bit computing, however, `sizeof()` needed more flexibility. The C90 standard fixed this by introducing `size_t`, an implementation-defined value intended to accomodate the actual, platform-specific range of valid sizes. `sizeof()` was changed to return this type instead of `int`.
+This being legacy C, there is an assumption that all sizes fit in an `int`, so that is what `sizeof()` returned. With the introduction of 64-bit computing, however, `sizeof()` needed more flexibility. The C90 standard fixed this by introducing `size_t`, an implementation-defined value intended to accommodate the actual, platform-specific range of valid sizes. `sizeof()` was changed to return this type instead of `int`.
 
 But that means that using the `%d` (signed integer) specifier on systems where `size_t` is a 32-bit unsigned long integer is wrong. On those systems, you would have to use `%lu`. But that's problematic, too: what about systems that use `uint64_t` for `size_t`? They have to use `%llu` as the format specifier.
 
@@ -987,5 +987,7 @@ Hot diggity-dog! My mind already swirls with the possibility of all the things I
 But that's for another day.
 
 ([Here is the code](https://github.com/bfelger/rom/tree/51a10fee23516ad44250bc652bae78f52460d942) with updates from this post.)
+
+Next: [Part 2](pt-2-compile-clang)
 
 Copyright 2023, Brandon Felger

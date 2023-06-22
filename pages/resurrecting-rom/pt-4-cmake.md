@@ -583,4 +583,6 @@ Now I'm ready to tackle the Herculean task of adding full MSVC support, and only
 
 ([Here is the code](https://github.com/bfelger/rom/tree/f03fa77b6e4779dc2e03b0b88c93bbe7d2cc0c3b) with updates from this post.)
 
+Next: [Part 5](pt-5-msvc)
+
 Copyright 2023, Brandon Felger
