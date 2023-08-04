@@ -7,7 +7,7 @@ categories: mud C CMake MSVC
 
 # Resurrecting ROM Pt. 5 &mdash; Compiling ROM With MSVC (Part 1)
 
-This post picks up where [Part 4](pt-4-cmake) left off. [Here is the code](https://github.com/bfelger/rom/tree/f03fa77b6e4779dc2e03b0b88c93bbe7d2cc0c3b) that resulted from the work.
+This post picks up where [Part 4](pt-4-cmake) left off. [Here is the code](https://github.com/bfelger/rom/tree/f03fa77b6e4779dc2e03b0b88c93bbe7d2cc0c3b) that resulted from that work.
 
 Previously, I made every attempt to squash all errors (and warnings) on each platform in one go. To do that on Windows would balloon this post, and create so many deltas in the git check-in that it would be utterly unintelligible. 
 

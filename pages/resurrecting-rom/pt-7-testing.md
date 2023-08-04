@@ -1,13 +1,13 @@
 ---
 layout: default
 title:  "Resurrecting ROM Pt. 7 - Benchmarks and Unit Tests"
-date:   2023-05-18 20:00:00 -0500
+date:   2023-05-22 20:00:00 -0500
 categories: mud C
 ---
 
 # Resurrecting ROM Pt. 7 &mdash; Benchmarks and Unit Tests
 
-This post picks up where [Part 6](pt-6-msvc-2) left off. [Here is the code](https://github.com/bfelger/rom/tree/ac968f668dd3f5c96eee55d6e855641d6a8ba496) that resulted from the work.
+This post picks up where [Part 6](pt-6-msvc-2) left off. [Here is the code](https://github.com/bfelger/rom/tree/ac968f668dd3f5c96eee55d6e855641d6a8ba496) that resulted from that work.
 
 Now that I have ROM up and running, with no warnings or errors, I want to start noodling around in the code. Improving legacy code requires two things that, at the moment, ROM is not set up to perform: benchmarks and unit tests.
 
@@ -49,12 +49,10 @@ I want to extend this logic by adding the ability to select to explicitly set th
         for (int i = 1; i < argc; i++) {
             if (is_number(argv[i])) {
                 port = atoi(argv[i]);
-                continue;
             }
             else if (!strcmp(argv[i], "-p")) {
                 if (++i < argc) {
                     port_str = argv[i];
-                    continue;
                 }
             }
             else if (!strncmp(argv[i], "--port=", 7)) {
@@ -109,6 +107,8 @@ extern char area_dir[];
 #define DEFAULT_AREA_DIR "./"
 ```
 
+This default assumes that ROM is being run the way it is expected to, now: from the `area` directory.
+
 I add two new options to the command-line handler, as well as the top-level variable to hold the string argument:
 
 ```c
@@ -119,7 +119,6 @@ I add two new options to the command-line handler, as well as the top-level vari
             else if (!strcmp(argv[i], "-a")) {
                 if (++i < argc) {
                     area_dir_str = argv[i];
-                    continue;
                 }
             }
             else if (!strncmp(argv[i], "--area-dir=", 7)) {
@@ -241,3 +240,314 @@ This change is an area where testing is non-optional; a single missed file will 
 
 Right now is when I wish I had comprehensive unit tests to catch these problems. I'll get to that later.
 
+## Unit-Test and Benchmarks
+
+Now that I have command-line parameters available, I'd like to add an option to run unit tests, either as part of the normal boot process of ROM, or as a stand-alone feature.
+
+To accommodate this, I add two new globals in `comm.c`:
+
+```c
+bool rt_opt_benchmark = false;
+bool rt_opt_noloop = false;
+```
+
+To run benchmarks in stand-alone mode, I can set both the these values to `true`.
+
+Next I add the actual command-line arguments:
+
+```c
+            else if (!strcmp(argv[i], "--benchmark")) {
+                rt_opt_benchmark = true;
+            }
+            else if (!strcmp(argv[i], "--benchmark-only")) {
+                rt_opt_benchmark = true;
+                rt_opt_noloop = true;
+            }
+            else if (argv[i][0] == '-') {
+                char* opt = argv[i] + 1;
+                while (*opt != '\0') {
+                    switch (*opt) {
+                    case 'b':
+                        rt_opt_benchmark = true;
+                        break;
+                    case 'B':
+                        rt_opt_benchmark = true;
+                        rt_opt_noloop = true;
+                        break;
+                    default:
+                        fprintf(stderr, "Unknown option '-%c'.\n", *opt);
+                        exit(1);
+                    }
+                    opt++;
+                }
+            }
+            else {
+                fprintf(stderr, "Unknown argument '%s'.\n", argv[i]);
+                exit(1);
+            }
+```
+
+Note that I added a new option for combined single-letter arguments (like `tar -xzvf` or some such). In this case, `-b` and `-B` are equivalent to `--benchmark` and `--benchmark-only`, respectively. Right now it might seem silly to have a loop to iterate through these characters if I only have one possible option, but my time will be saved down the road if I ever add new options.
+
+I think `rt_opt_noloop` is self-explanatory: it do not run the game-loop at all, or accept socket connections. But that means there is a mess of code in `comm.c` that I do not need if I run with `--benchmark-only`. Problem: a lot of that code happens before execution even gets to the argument handler. It needs to be moved.
+
+Here is the chunk that needs to be moved:
+
+```c
+#ifdef _MSC_VER
+    WORD wVersionRequested;
+    WSADATA wsaData;
+    int err;
+
+    /* Use the MAKEWORD(lowbyte, highbyte) macro declared in Windef.h */
+    wVersionRequested = MAKEWORD(2, 2);
+
+    err = WSAStartup(wVersionRequested, &wsaData);
+    if (err != 0) {
+        /* Tell the user that we could not find a usable */
+        /* Winsock DLL.                                  */
+        printf("WSAStartup failed with error: %d\n", err);
+        exit(1);
+    }
+#endif
+
+    /*
+     * Memory debugging if needed.
+     */
+#if defined(MALLOC_DEBUG)
+    malloc_debug(2);
+#endif
+
+    /*
+     * Init time.
+     */
+    gettimeofday(&now_time, NULL);
+    current_time = (time_t)now_time.tv_sec;
+    strcpy(str_boot_time, ctime(&current_time));
+
+    /*
+     * Reserve one channel for our use.
+     */
+    if ((fpReserve = fopen(NULL_FILE, "r")) == NULL) {
+#ifdef _MSC_VER
+        printf("Please create a file named '%s' in the executing directory.", NULL_FILE);
+#endif
+        perror(NULL_FILE);
+        exit(1);
+    }
+```
+
+I move it to immediately after the command-line argument handler, but I guard the WinSock initialization against `rt_opt_no_loop`:
+
+```c
+#ifdef _MSC_VER
+    if (!rt_opt_noloop) {
+        WORD wVersionRequested;
+        WSADATA wsaData;
+        int err;
+
+        /* Use the MAKEWORD(lowbyte, highbyte) macro declared in Windef.h */
+        wVersionRequested = MAKEWORD(2, 2);
+
+        err = WSAStartup(wVersionRequested, &wsaData);
+        if (err != 0) {
+            /* Tell the user that we could not find a usable */
+            /* Winsock DLL.                                  */
+            printf("WSAStartup failed with error: %d\n", err);
+            exit(1);
+        }
+    }
+#endif
+```
+
+I do the same thing with the main game loop:
+
+```c
+
+    if (!rt_opt_noloop) {
+        control = init_socket(port);
+        sprintf(log_buf, "ROM is ready to rock on port %d.", port);
+        log_string(log_buf);
+        game_loop(control);
+        CLOSE_SOCKET(control);
+    }
+```
+
+Note that I moved the `init_socket()` call from earlier in the code.
+
+I don't have any immediate needs for benchmarks, but I want to create a simple one to use as a reference implementation.
+
+### Adding Benchmarks
+
+I start by added a new file, `benchmark.h`:
+
+```c
+////////////////////////////////////////////////////////////////////////////////
+// benchmark.h
+//
+// Utilities for gathering metrics to benchmark code changes
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+#ifndef ROM__BENCHMARK_H
+#define ROM__BENCHMARK_H
+
+#include <stdbool.h>
+#include <time.h>
+
+typedef struct {
+    struct timespec start;
+    struct timespec stop;
+    bool running;
+} Timer;
+
+struct timespec elapsed(Timer* timer);
+void start_timer(Timer* timer);
+void stop_timer(Timer* timer);
+
+#endif // !ROM__BENCHMARK_H
+```
+
+It defines a simple timer that I can use the benchmark how long certain processes take. The idea is that I can compare "before" and "after" numbers to see if the future changes I implement make a difference or not.
+
+Next I create `benchmark.c` and get it primed:
+
+```c
+////////////////////////////////////////////////////////////////////////////////
+// benchmark.c
+//
+// Utilities for gathering metrics to benchmark code changes
+////////////////////////////////////////////////////////////////////////////////
+
+#include "benchmark.h"
+```
+
+The first function starts the timer:
+
+```c
+void start_timer(Timer* timer)
+{
+    if (!timer->running) {
+        clock_gettime(CLOCK_MONOTONIC, &(timer->start));
+        timer->running = true;
+    }
+}
+```
+
+> NOTE: The code repo for this commit has a bug in `start_timer()`: the conditional in this function is lacking the NOT (`!`) operator. This is fixed in Latest.
+
+The second function stops the timer:
+
+```c
+void stop_timer(Timer* timer)
+{
+    if (timer->running) {
+        clock_gettime(CLOCK_MONOTONIC, &(timer->stop));
+        timer->running = false;
+    }
+}
+```
+
+The last function calculates the difference between them:
+
+```c
+struct timespec elapsed(Timer* timer)
+{
+    struct timespec temp = { 0 };
+
+    if (!timer->running)
+        return temp;
+
+    if ((timer->stop.tv_nsec - timer->start.tv_nsec) < 0) {
+        temp.tv_sec = timer->stop.tv_sec - timer->start.tv_sec - 1;
+        temp.tv_nsec = 1000000000 + timer->stop.tv_nsec - timer->start.tv_nsec;
+    }
+    else {
+        temp.tv_sec = timer->stop.tv_sec - timer->start.tv_sec;
+        temp.tv_nsec = timer->stop.tv_nsec - timer->start.tv_nsec;
+    }
+    return temp;
+}
+```
+
+I could have commented this better, but the first conditional tests to see if subtracting nanoseconds results in a negative value. If it does, I subtract a single second from `tv_sec` and add that many nanoseconds to `tv_nsec`.
+
+Now, MSVC has a problem: it does not have the POSIX function `clock_gettime()`. I once again cheat and pull in code from the internet. I place this above the other functions in `benchmark.c`:
+
+```c
+#ifdef _MSC_VER
+#include <windows.h>
+#include <winsock.h>
+#define CLOCK_MONOTONIC		        1
+#define CLOCK_PROCESS_CPUTIME_ID    2
+
+#define MS_PER_SEC      1000ULL     // MS = milliseconds
+#define US_PER_MS       1000ULL     // US = microseconds
+#define HNS_PER_US      10ULL       // HNS = hundred-nanoseconds (e.g., 1 hns = 100 ns)
+#define NS_PER_US       1000ULL
+
+#define HNS_PER_SEC     (MS_PER_SEC * US_PER_MS * HNS_PER_US)
+#define NS_PER_HNS      (100ULL)    // NS = nanoseconds
+#define NS_PER_SEC      (MS_PER_SEC * US_PER_MS * NS_PER_US)
+
+////////////////////////////////////////////////////////////////////////////////
+// This implementation taken from StackOverflow user jws's example:
+//    https://stackoverflow.com/a/51974214
+// I only implemented the CLOCK_MONOTONIC version.
+////////////////////////////////////////////////////////////////////////////////
+static int clock_gettime(int X, struct timespec* tv)
+{
+    static LARGE_INTEGER ticksPerSec;
+    LARGE_INTEGER ticks;
+
+    if (!ticksPerSec.QuadPart) {
+        QueryPerformanceFrequency(&ticksPerSec);
+        if (!ticksPerSec.QuadPart) {
+            errno = ENOTSUP;
+            return -1;
+        }
+    }
+
+    QueryPerformanceCounter(&ticks);
+
+    tv->tv_sec = (long)(ticks.QuadPart / ticksPerSec.QuadPart);
+    tv->tv_nsec = (long)(((ticks.QuadPart % ticksPerSec.QuadPart) * NS_PER_SEC) 
+        / ticksPerSec.QuadPart);
+
+    return 0;
+}
+////////////////////////////////////////////////////////////////////////////////
+#endif
+```
+
+Now I need to hook up the function calls to make it work. I include the new header in `comm.c`:
+
+```c
+#include "benchmark.h"
+```
+
+Timing the boot sequence is pretty trivial, at this point; I just need to book-end the call to `boot_db()` in `main()`:
+
+```c
+    Timer boot_timer = { 0 };
+    if (rt_opt_benchmark)
+        start_timer(&boot_timer);
+
+    boot_db();
+
+    if (rt_opt_benchmark) {
+        stop_timer(&boot_timer);
+        struct timespec timer_res = elapsed(&boot_timer);
+        sprintf(log_buf, "Boot time: "TIME_FMT"s, %ldns.", 
+            timer_res.tv_sec, timer_res.tv_nsec);
+        log_string(log_buf);
+    }
+```
+
+And with that, I am now set up move into actual feature adds for ROM.
+
+([Here is the code](https://github.com/bfelger/rom/tree/98569541809c13d9f6f7c9b755541a033e4fb7f1) with updates from this post. Note that it has the aforementioned error that is fixed in Latest.)
+
+Next: [Part 8](pt-8-mt-sockets)
+
+Copyright 2023, Brandon Felger

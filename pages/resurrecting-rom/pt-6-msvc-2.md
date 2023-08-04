@@ -7,7 +7,7 @@ categories: mud C CMake MSVC
 
 # Resurrecting ROM Pt. 6 &mdash; Compiling ROM With MSVC (Part 2)
 
-This post picks up where [Part 5](pt-5-msvc) left off. [Here is the code](https://github.com/bfelger/rom/tree/70717079d2b4bb3a1e3ab1fd692e165ee8cf6e07) that resulted from the work.
+This post picks up where [Part 5](pt-5-msvc) left off. [Here is the code](https://github.com/bfelger/rom/tree/70717079d2b4bb3a1e3ab1fd692e165ee8cf6e07) that resulted from that work.
 
 I got ROM building and running without errors on MSVC on Windows. The task was made all the easier with the help of CMake. But my stated original goal was that it should compile on all platforms at my disposal (GCC, Clang, Cygwin, and MSVC) without errors _or warnings_.
 
@@ -711,5 +711,7 @@ And with that, ROM now builds, error _and_ warning-free, on all four of my targe
 Future noodlings in this code base will be built on the work I did here.
 
 ([Here is the code](https://github.com/bfelger/rom/tree/ac968f668dd3f5c96eee55d6e855641d6a8ba496) with updates from this post.)
+
+Next: [Part 7](pt-7-testing)
 
 Copyright 2023, Brandon Felger

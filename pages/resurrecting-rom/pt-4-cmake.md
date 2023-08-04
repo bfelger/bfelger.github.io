@@ -9,7 +9,7 @@ categories: mud C CMake
 
 _Soon, the last vestiges of TAB characters will be erased from this project forever._
 
-This post picks up where [Part 3](pt-3-dusting-off-cobwebs) left off. [Here is the code](https://github.com/bfelger/rom/tree/addcc5c67e81940dff838f45e12fbae22c75ecff) that resulted from the work.
+This post picks up where [Part 3](pt-3-dusting-off-cobwebs) left off. [Here is the code](https://github.com/bfelger/rom/tree/addcc5c67e81940dff838f45e12fbae22c75ecff) that resulted from that work.
 
 Makefiles have been working well for us, so far. But as I increase the number of build targets, so too will the number of Makefiles required. CMake is a cross-platform build solution that, unlike Makefile, has official support in Visual Studio. This will be crucial when I port to MSVC, as it avoids the creation of solution and project files.
 
