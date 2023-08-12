@@ -794,6 +794,7 @@ This is not related to multi-threading at all, but I need to mention it because 
 
 I renamed it to `ch_class`, and went on with my day.
 
+
 ([Here is the code](https://github.com/bfelger/rom/tree/4c6562a39cf4627b63398022c222b8bafb9aa731) with updates from this post.)
 
 Next: [Part 9](pt-tls)

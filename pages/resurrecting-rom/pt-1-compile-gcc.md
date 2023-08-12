@@ -14,6 +14,8 @@ I've collected the archaeological relics of ROM 2.4b6 and Lope's ColoUr code [he
 
 If the idea of manually fixing dozens of patch merge conflicts isn't your cup of tea, you can follow along by grabbing [my copy](https://github.com/bfelger/rom/tree/ba26f981060201c3ef4db25a91d0ffd65d680a6c) with the patches already applied.
 
+> **Note that this post does not cover OLC.** That bit of code is pretty clever, but riddled with problems. I am tackling it later. That means I'll be meticulously splicing in `patch.olc` after the fact, once I have ROM otherwise complete.
+
 ## Compiling with GCC
 
 ROM was developed and tested using GCC on a variety of weird UNIX machines (its progenitors, Merc and Diku, predated Linux by several years), so Linux gives me my best shot at compiling it out of the box.

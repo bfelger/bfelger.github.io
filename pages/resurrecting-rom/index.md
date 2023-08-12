@@ -17,3 +17,8 @@ This is a series of posts about reviving and old, favorite project of mine, a MU
 7. [Resurrecting ROM &mdash; Benchmarks and Unit Tests](pt-7-testing) - Adding better command-line support, arbitrary run location, and a framework for benchmarking. _[2023-05-22]_
 8. [Resurrecting ROM &mdash; Preparing for Secure Sockets](pt-8-mt-sockets) - Refactoring net code and asynchronous `accept()` with threads. _[2023-08-01]_
 9. [Resurrecting ROM &mdash; Secure Sockets with OpenSSL](pt-9-tls) - Encrypting traffic with TLS. _[2023-08-04]_
+10. [Resurrecting ROM &mdash; Cross-Platform Password Hashing](pt-10-pwd-hash) - Finally getting rid of `crypt()`. _[2023-08-05]_
+
+## Related Topics
+
+- [Should I Convert This Ancient C Code to C++?](topic-01-cpp) - No. Or... _maybe_. _[2023-08-09]_ 

@@ -492,12 +492,18 @@ THIS IS A MUD BASED ON.....
 By what name do you wish to be known?
 ```
 
-And there it is. ROM Resurrected is now _complete_, and I have done everything I set out to do. Now it's time to implement _actual features_.
+All communications between ROM and the client are now secure. This is big step up from how I left things with my old mud 20 years ago.
 
 ## Housekeeping
 
 Since I'm pretty firmly set on CMake for the duration of this project, I removed `Makefile` and `Makefile.clang` from the `src` folder. You can easily keep and maintain them, if you prefer.
 
+## Coda
+
+There is just one more thing I have to do before I can consider ROM Resurrected "complete". I have to finally slay the beast that has haunted me from the very outset: `crypt()`.
+
 ([Here is the code](https://github.com/bfelger/rom/tree/4f484d0917dddc94473e80fe5927b7826a21b3af) with updates from this post.)
+
+Next: [Part 10](pt-pwd-hash)
 
 Copyright 2023, Brandon Felger
