@@ -7,7 +7,7 @@ categories: mud C
 
 # Resurrecting ROM Pt. 8 &mdash; Preparing for Secure Sockets
 
-This post picks up where [Part 7](pt-7-testing) left off. [Here is the code](https://github.com/bfelger/rom/tree/98569541809c13d9f6f7c9b755541a033e4fb7f1) that resulted from that work.
+This post picks up where [Part 7](pt-7-testing) left off. [Here is the code](https://github.com/bfelger/Mud98/tree/98569541809c13d9f6f7c9b755541a033e4fb7f1) that resulted from that work.
 
 Before I do anything further with ROM, I need to fix a glaring problem that plagued me back in _Ye Olden Tymes_: clear-text telnet sockets that broadcast my flippin' _password_ to the whole world. Now, there are a number of ways to skin this cat, and it seems that a popular option is SSH/SSL tunneling.  I prefer a more built-in approach so ROM can run securely out-of-the-box.
 
@@ -795,7 +795,7 @@ This is not related to multi-threading at all, but I need to mention it because 
 I renamed it to `ch_class`, and went on with my day.
 
 
-([Here is the code](https://github.com/bfelger/rom/tree/4c6562a39cf4627b63398022c222b8bafb9aa731) with updates from this post.)
+([Here is the code](https://github.com/bfelger/Mud98/tree/4c6562a39cf4627b63398022c222b8bafb9aa731) with updates from this post.)
 
 Next: [Part 9](pt-tls)
 

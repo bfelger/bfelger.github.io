@@ -8,7 +8,7 @@ categories: mud C Unix
 
 _Skip this if you still need to build ROM on an HP 9000/300 from 1988._
 
-This post picks up where [Part 2](pt-2-compile-clang) left off. [Here is the code](https://github.com/bfelger/rom/tree/050e23e08a81f86ec8f7352b6f18c8ba55eb8fdb) that resulted from that work. So far, I have ROM building in GCC on Ubuntu without errors or warnings.
+This post picks up where [Part 2](pt-2-compile-clang) left off. [Here is the code](https://github.com/bfelger/Mud98/tree/050e23e08a81f86ec8f7352b6f18c8ba55eb8fdb) that resulted from that work. So far, I have ROM building in GCC on Ubuntu without errors or warnings.
 
 I know I said Part 3 was going to be porting to MSVC, but upon reflection, I believe significant work needs to be done to make that work as painless as possible. 
 
@@ -483,7 +483,7 @@ And with that, I have exorcised all the demons of legacy platforms (_that I know
 
 There is yet more work to be done to set myself up for success in porting to MSVC, and that is getting rid of Make and adopting CMake. That will be Part 4 of the "Resurrecting ROM" series.
 
-([Here is the code](https://github.com/bfelger/rom/tree/addcc5c67e81940dff838f45e12fbae22c75ecff) with updates from this post.)
+([Here is the code](https://github.com/bfelger/Mud98/tree/addcc5c67e81940dff838f45e12fbae22c75ecff) with updates from this post.)
 
 Next: [Part 4](pt-4-cmake) 
 

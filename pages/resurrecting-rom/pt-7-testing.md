@@ -7,7 +7,7 @@ categories: mud C
 
 # Resurrecting ROM Pt. 7 &mdash; Benchmarks and Unit Tests
 
-This post picks up where [Part 6](pt-6-msvc-2) left off. [Here is the code](https://github.com/bfelger/rom/tree/ac968f668dd3f5c96eee55d6e855641d6a8ba496) that resulted from that work.
+This post picks up where [Part 6](pt-6-msvc-2) left off. [Here is the code](https://github.com/bfelger/Mud98/tree/ac968f668dd3f5c96eee55d6e855641d6a8ba496) that resulted from that work.
 
 Now that I have ROM up and running, with no warnings or errors, I want to start noodling around in the code. Improving legacy code requires two things that, at the moment, ROM is not set up to perform: benchmarks and unit tests.
 
@@ -546,7 +546,7 @@ Timing the boot sequence is pretty trivial, at this point; I just need to book-e
 
 And with that, I am now set up move into actual feature adds for ROM.
 
-([Here is the code](https://github.com/bfelger/rom/tree/98569541809c13d9f6f7c9b755541a033e4fb7f1) with updates from this post. Note that it has the aforementioned error that is fixed in Latest.)
+([Here is the code](https://github.com/bfelger/Mud98/tree/98569541809c13d9f6f7c9b755541a033e4fb7f1) with updates from this post. Note that it has the aforementioned error that is fixed in Latest.)
 
 Next: [Part 8](pt-8-mt-sockets)
 

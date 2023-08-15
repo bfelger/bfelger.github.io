@@ -12,7 +12,7 @@ _A short exercise in code necromancy (2023-05-06)_
 
 I've collected the archaeological relics of ROM 2.4b6 and Lope's ColoUr code [here](assets/Rom24andColour.zip). It's a ZIP file, but inside are two "tar-balls" that you can open with `tar -xzf` on a Linux box or Cygwin (or third-party Windows unzipper of your choice).
 
-If the idea of manually fixing dozens of patch merge conflicts isn't your cup of tea, you can follow along by grabbing [my copy](https://github.com/bfelger/rom/tree/ba26f981060201c3ef4db25a91d0ffd65d680a6c) with the patches already applied.
+If the idea of manually fixing dozens of patch merge conflicts isn't your cup of tea, you can follow along by grabbing [my copy](https://github.com/bfelger/Mud98/tree/ba26f981060201c3ef4db25a91d0ffd65d680a6c) with the patches already applied.
 
 > **Note that this post does not cover OLC.** That bit of code is pretty clever, but riddled with problems. I am tackling it later. That means I'll be meticulously splicing in `patch.olc` after the fact, once I have ROM otherwise complete.
 
@@ -988,7 +988,7 @@ Hot diggity-dog! My mind already swirls with the possibility of all the things I
 
 But that's for another day.
 
-([Here is the code](https://github.com/bfelger/rom/tree/51a10fee23516ad44250bc652bae78f52460d942) with updates from this post.)
+([Here is the code](https://github.com/bfelger/Mud98/tree/51a10fee23516ad44250bc652bae78f52460d942) with updates from this post.)
 
 Next: [Part 2](pt-2-compile-clang)
 

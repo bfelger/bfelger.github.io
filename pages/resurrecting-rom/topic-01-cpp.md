@@ -13,7 +13,7 @@ The long answer is _maybe_.
 
 The longer, longer answer is "that's the wrong question" (I'll explain).
 
-This is an undertaking I've made many times over the years, many project, with varying results. And as someone who's been programming in both C and C++ for over 24 years, I consider myself enough of a grognard to have a rigid, dogmatic opinion of outsized self-importance on the issue.
+This is an undertaking I've made many times over the years, with many projects, and with varying results. And as someone who's been programming in both C and C++ for over 24 years, I consider myself enough of a grognard to have a rigid, dogmatic opinions of outsized self-importance on their relative merits.
 
 Before porting ROM (or any legacy C project) to C++, you need to be able to answer these questions:
 1. What am I hoping to gain by porting from C to C++?
@@ -52,7 +52,7 @@ Idiomatic C code hides nothing. Idiomatic C++ hides as much complexity as possib
 
 ## Reasons Not to Port ROM to C++
 
-There are many misconceptions C++ in particular, and OOP in general, that lead to misguided "upgrade" projects. But there are some cold, hard truths:
+There are many misconceptions about C++ in particular, and OOP in general, that lead to misguided "upgrade" projects. But there are some cold, hard truths:
 
 ### OOP is a poor fit for ROM
 
@@ -60,7 +60,7 @@ There are many misconceptions C++ in particular, and OOP in general, that lead t
 
 Why wouldn't ROM be perfect for Object-Oriented Programming? After all, everything in ROM is an object of some kind: a room, an area, a person, a thing. Each one is "tangible" in the context of game play. At first glance, it seems almost obvious that these things are objects (in the programming sense), and they should be defined by classes with control over the operations made on them.
 
-But what about operations _between_ them? When you decide to toss an `OBJ_DATA` into a `ROOM_DATA`, who owns that operation? The Room, or the Object? This dilemma is satisfied most easily in pure-OOP languages like Java and C# by creating some kind of `RoomObjectManager` (implemented as a Singleton, naturally) to do pretty much what ROM already does in C: `obj_to_room()`.
+But what about operations _between_ them? When you decide to toss an `OBJ_DATA` into a `ROOM_DATA`, who owns that operation? The Room, or the Object? This dilemma is satisfied most easily in pure-OOP languages like Java and C# by creating some kind of `RoomObjectManager` (implemented as a Singleton, naturally) to do pretty much what ROM already does (and trivially so) in C: `send_obj_to_room()`.
 
 In the end, ROM's tangible entities are not as important as the relationships between them and the actions performed to affect them.
 
@@ -68,7 +68,7 @@ In the end, ROM's tangible entities are not as important as the relationships be
 >
 > Please, consider it required reading. I was going to copy-and-paste a quote, but the whole thing is too dense with good insight to pick just one passage.
 
-Now, C++ is an OOP-_enabled_ language, not an OOP-_enforced_ language. So you can port ROM and leave OOP to the wayside; and indeed, that is precisely what I would do if I did such a thing. C++ is, at heart, "mult-paradigm". It does not set out to enforce purity in any one programming philosophy.
+Now, C++ is an OOP&ndash;_enabled_ language, not an OOP&ndash;_enforced_ language. So you can port ROM and leave OOP to the wayside; and indeed, that is precisely what I would do if I did such a thing. C++ is, at heart, "mult-paradigm". It does not set out to enforce purity in any one programming philosophy.
 
 In my option, good C++ code should do likewise.
 
@@ -90,9 +90,9 @@ C also has sparsely-designated aggregate initialization. In `const.c`, it would 
     [ELEM_4] = {"elem4", "thing4", ELEM_DATA_4},
  //...
  ```
- ...where `ELEM_1` and so-on are macro definitions in `merc.h` This works even when the elements listed are non-continuous. This is not possible in C++, which does not permit this (then again, MSVC doesn't allow this in C, either, because their implementation of C99 is paltry).
+ ...where `ELEM_1` and so-on are macro definitions in `merc.h` This works even when the elements listed are non-continuous. This is not possible in C++, which does not permit this (then again, MSVC doesn't allow this in C, either, because their implementation only goes up to C99, and even that is paltry).
 
-This isn't just a matter of syntax, but also behavior. The C++ standard requires certain optimizations that are not required in C. Other popular C patterns, such as type-punning, are explicitly labeled UB ("Undefined Behavior") in C.
+This isn't just a matter of syntax, but also behavior. The C++ standard requires certain optimizations that are not required in C. Other popular C patterns, such as type-punning, are explicitly labeled UB ("Undefined Behavior") in C++.
 
 ## Reasons to Add C++ to ROM
 
@@ -104,7 +104,7 @@ It is very much possible to place C and C++ in the same CMake project, and combi
 
 ### Resource Acquisition Is Initialization (RAII)
 
-This, for me, is the #1 thing C++ brings to the table. ROM has tons of places that require bookend boilerplate for resource management.  Let's take, for instance, `BUFFER`, which I made use of in ROM Resurrected to avoid blowing the stack with huge `char` arrays on the stack:
+This, for me, is the #1 thing C++ brings to the table. ROM has tons of places that require bookend boilerplate for resource management.  Let's take, for instance, `BUFFER`, which I made use of in ROM Resurrected to avoid blowing the stack with huge `char` arrays:
 
 ```c
 void foo(char* str) 

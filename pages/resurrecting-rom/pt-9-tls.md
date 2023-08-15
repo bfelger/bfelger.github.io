@@ -7,7 +7,7 @@ categories: mud C
 
 # Resurrecting ROM Pt. 9 &mdash; Secure Sockets with OpenSSL
 
-This post picks up where [Part 8](pt-8-mt-sockets) left off. [Here is the code](https://github.com/bfelger/rom/tree/4c6562a39cf4627b63398022c222b8bafb9aa731) that resulted from that work.
+This post picks up where [Part 8](pt-8-mt-sockets) left off. [Here is the code](https://github.com/bfelger/Mud98/tree/4c6562a39cf4627b63398022c222b8bafb9aa731) that resulted from that work.
 
 This day in age, I don't feel too good about running a server where users transmit credentials in the plain text, to be read by the entire world. I imagine there is a not insignificant number of people that use the same password for their bank and they do for their level 50 wizard.
 
@@ -502,7 +502,7 @@ Since I'm pretty firmly set on CMake for the duration of this project, I removed
 
 There is just one more thing I have to do before I can consider ROM Resurrected "complete". I have to finally slay the beast that has haunted me from the very outset: `crypt()`.
 
-([Here is the code](https://github.com/bfelger/rom/tree/4f484d0917dddc94473e80fe5927b7826a21b3af) with updates from this post.)
+([Here is the code](https://github.com/bfelger/Mud98/tree/4f484d0917dddc94473e80fe5927b7826a21b3af) with updates from this post.)
 
 Next: [Part 10](pt-pwd-hash)
 

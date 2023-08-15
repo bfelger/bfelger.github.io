@@ -8,7 +8,7 @@ categories: mud C clang cygwin
 
 _Continued studies in grave-robbing_
 
-This post picks up where [Part 1](pt-1-compile-gcc) left off. [Here is the code](https://github.com/bfelger/rom/tree/51a10fee23516ad44250bc652bae78f52460d942) that resulted from that work. So far, I have ROM building in GCC on Ubuntu without errors or warnings.
+This post picks up where [Part 1](pt-1-compile-gcc) left off. [Here is the code](https://github.com/bfelger/Mud98/tree/51a10fee23516ad44250bc652bae78f52460d942) that resulted from that work. So far, I have ROM building in GCC on Ubuntu without errors or warnings.
 
 ## Compiling for Clang 14
 
@@ -431,7 +431,7 @@ By what name do you wish to be known?
 
 Awesome. We now have ROM running, warning-free, on three compilers on two different platforms! But the next one is going to be the biggest bugbear: MSVC on Windows. But it's an exercise worth doing.
 
-([Here is the code](https://github.com/bfelger/rom/tree/050e23e08a81f86ec8f7352b6f18c8ba55eb8fdb) with updates from this post.)
+([Here is the code](https://github.com/bfelger/Mud98/tree/050e23e08a81f86ec8f7352b6f18c8ba55eb8fdb) with updates from this post.)
 
 Next: [Part 3](pt-3-dusting-off-cobwebs)
 

@@ -7,7 +7,7 @@ categories: mud C
 
 # Resurrecting ROM Pt. 10 &mdash; Cross-Platform Password Hashing
 
-This post picks up where [Part 9](pt-9-tls) left off. [Here is the code](https://github.com/bfelger/rom/tree/4f484d0917dddc94473e80fe5927b7826a21b3af) that resulted from that work.
+This post picks up where [Part 9](pt-9-tls) left off. [Here is the code](https://github.com/bfelger/Mud98/tree/4f484d0917dddc94473e80fe5927b7826a21b3af) that resulted from that work.
 
 If you recall from [Part 5](pt-5-msvc), I have been "riding dirty" with clear-text passwords in player files due to a lack of a `crypt()` implementation. But now that I have cross-platform TLS implemented via OpenSSL, I also now have, by happenstance, a cross-platform _hashing_ solution.
 
@@ -607,6 +607,6 @@ And with that, player passwords are now safely hidden in plain sight.
 
 This was the last "big" feature that I wanted in order to consider ROM Resurrected "complete". However, I've decided to go the extra mile and take on the most onerous task of this entire project: Ivan's OLC 2.1. I'll handle that next, and then call it done.
 
-([Here is the code](https://github.com/bfelger/rom/tree/6bba8ccfb10aaa01a65f0023f8280526f611c4a4) with updates from this post.)
+([Here is the code](https://github.com/bfelger/Mud98/tree/6bba8ccfb10aaa01a65f0023f8280526f611c4a4) with updates from this post.)
 
 Copyright 2023, Brandon Felger
